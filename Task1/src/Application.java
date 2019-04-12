@@ -12,3 +12,4 @@ public class Application {
         solutions.canBeEqualTo24(numbers.getNumbers());
     }
 }
+
