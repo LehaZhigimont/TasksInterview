@@ -4,6 +4,7 @@
 #Other files
 *.lock
 *.gen
+*.xml
 
 #Folders
 /.metadata/.plugins/*
