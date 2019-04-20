@@ -1,13 +1,13 @@
 package com.zhigimont.by;
 
-public class Solutions {
+public class Solution {
     private char[] signs = {'+', '-', '*', '/'};
     private char[][] tempSigns = new char[64][4]; // массив для хранения всех возможных вариантов signs[];
     private boolean[] bool = new boolean[4];  // массив для проверки использования индекса
     private int[] tempIndex = new int[4];  // массив для перестановки индексов
     private int[][] tempInt = new int[24][4];
     private int countTempInt = 0;  //счетчик для записи в tempInt[][];
-    private int firstElem =0, secondElem = 1, thirdElem = 2, fourthElem = 3;
+    private int firstElem = 0, secondElem = 1, thirdElem = 2, fourthElem = 3;
 
     public boolean canBeEqualTo24(int[] nums) {
         creatingMixSigns();
@@ -61,14 +61,10 @@ public class Solutions {
     private boolean exampleSolutions(int[][] allArray, char[][] allSigns) {
         for (int[] arr : allArray) {
             for (char[] tempSigns : allSigns) {
-                try {
-                    if (firstSolution(arr, tempSigns) == 24.0 || secondSolution(arr, tempSigns) == 24
-                            || thirtSolution(arr, tempSigns) == 24 || fourthSolution(arr, tempSigns) == 24
-                            || fifthSolution(arr, tempSigns) == 24 ) {
-                        return true;
-                    }
-                } catch (ArithmeticException e) {
-                    continue;
+                if (roundResult(firstSolution(arr, tempSigns)) || roundResult(secondSolution(arr, tempSigns))
+                        || roundResult(thirtSolution(arr, tempSigns)) || roundResult(fourthSolution(arr, tempSigns))
+                        || roundResult(fifthSolution(arr, tempSigns))) {
+                    return true;
                 }
             }
         }
@@ -76,49 +72,73 @@ public class Solutions {
     }
 
     // a+b+c+d && (a+b)+c+d && ((a+b)+c)+d
-    private double firstSolution(int[] arr, char[] tempSigns) throws ArithmeticException {
+    private double firstSolution(int[] arr, char[] tempSigns) {
         double result = 0;
-        result = calc(arr[firstElem], arr[secondElem], tempSigns[firstElem]);
-        result = calc(result, arr[thirdElem], tempSigns[secondElem]);
-        result = calc(result, arr[fourthElem], tempSigns[thirdElem]);
-        return result;
+        try {
+            result = calc(arr[firstElem], arr[secondElem], tempSigns[firstElem]);
+            result = calc(result, arr[thirdElem], tempSigns[secondElem]);
+            result = calc(result, arr[fourthElem], tempSigns[thirdElem]);
+            return result;
+        }catch (ArithmeticException e){
+            return 0;
+        }
     }
 
     // (a+b)+(c+d) && a+b+(c+d)
-    private double secondSolution(int[] arr, char[] tempSigns) throws ArithmeticException {
+    private double secondSolution(int[] arr, char[] tempSigns){
         double result = 0;
         double result1 = 0;
-        result = calc(arr[firstElem], arr[secondElem], tempSigns[firstElem]);
-        result1 = calc(arr[thirdElem], arr[fourthElem], tempSigns[thirdElem]);
-        result = calc(result, result1, tempSigns[secondElem]);
-        return result;
+        try {
+            result = calc(arr[firstElem], arr[secondElem], tempSigns[firstElem]);
+            result1 = calc(arr[thirdElem], arr[fourthElem], tempSigns[thirdElem]);
+            result = calc(result, result1, tempSigns[secondElem]);
+            return result;
+        }catch (ArithmeticException e){
+            return 0;
+        }
     }
 
     // (a+(b+c))+d && a+(b+c)+d
-    private double thirtSolution(int[] arr, char[] tempSigns) throws ArithmeticException {
+    private double thirtSolution(int[] arr, char[] tempSigns) {
         double result = 0;
-        result = calc(arr[secondElem], arr[thirdElem], tempSigns[secondElem]);
-        result = calc(arr[firstElem], result, tempSigns[firstElem]);
-        result = calc(result, arr[fourthElem], tempSigns[thirdElem]);
-        return result;
+        try {
+            result = calc(arr[secondElem], arr[thirdElem], tempSigns[secondElem]);
+            result = calc(arr[firstElem], result, tempSigns[firstElem]);
+            result = calc(result, arr[fourthElem], tempSigns[thirdElem]);
+            return result;
+        }catch (ArithmeticException e){
+            return 0;
+        }
     }
 
     //a+((b+c)+d)
-    private double fourthSolution(int[] arr, char[] tempSigns) throws ArithmeticException {
+    private double fourthSolution(int[] arr, char[] tempSigns) {
         double result = 0;
-        result = calc(arr[1], arr[thirdElem], tempSigns[secondElem]);
-        result = calc(result, arr[fourthElem], tempSigns[thirdElem]);
-        result = calc(arr[firstElem], result, tempSigns[firstElem]);
-        return result;
+        try {
+            result = calc(arr[secondElem], arr[thirdElem], tempSigns[secondElem]);
+            result = calc(result, arr[fourthElem], tempSigns[thirdElem]);
+            result = calc(arr[firstElem], result, tempSigns[firstElem]);
+            return result;
+        } catch (ArithmeticException e) {
+            return 0;
+        }
     }
 
     //a+(b+(c+d))
-    private double fifthSolution(int[] arr, char[] tempSigns) throws ArithmeticException {
+    private double fifthSolution(int[] arr, char[] tempSigns) {
         double result = 0;
-        result = calc(arr[thirdElem], arr[fourthElem], tempSigns[thirdElem]);
-        result = calc(arr[secondElem], result, tempSigns[secondElem]);
-        result = calc(arr[firstElem], result, tempSigns[firstElem]);
-        return result;
+        try {
+            result = calc(arr[thirdElem], arr[fourthElem], tempSigns[thirdElem]);
+            result = calc(arr[secondElem], result, tempSigns[secondElem]);
+            result = calc(arr[firstElem], result, tempSigns[firstElem]);
+            return result;
+        } catch (ArithmeticException e) {
+            return 0;
+        }
+    }
+
+    private boolean roundResult(double result) {
+        return Math.abs(result - 24) < 0.001;
     }
 
     private double calc(double a, double b, char operation) throws ArithmeticException {
