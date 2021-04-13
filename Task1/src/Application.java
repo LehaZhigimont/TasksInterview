@@ -1,4 +1,3 @@
-package com.zhigimont.by;
 /**
  * @author Zhigimont Alexey
  * @version 1.0
@@ -8,7 +7,7 @@ package com.zhigimont.by;
 public class Application {
     public static void main(String[] args) {
         Numbers numbers = new Numbers();
-        Solutions solutions = new Solutions();
+        Solution solutions = new Solution();
         solutions.canBeEqualTo24(numbers.getNumbers());
     }
 }

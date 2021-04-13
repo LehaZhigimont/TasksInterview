@@ -1,4 +1,3 @@
-package com.zhigimont.by;
 
 public class Numbers {
     private int[] numbers;

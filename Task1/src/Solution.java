@@ -1,4 +1,3 @@
-package com.zhigimont.by;
 
 public class Solution {
     private char[] signs = {'+', '-', '*', '/'};
